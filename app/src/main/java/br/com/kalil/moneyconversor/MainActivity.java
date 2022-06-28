@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,6 +18,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     static URL url = null;
     static double precoDolar = 1;
 
+    static double precoEuro = 1;
+
     //método ViewHolder criado
     private ViewHolder mViewHolder = new ViewHolder();
 
@@ -26,7 +27,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void main(String[]args){
         try {
-
             url = new URL("https://dolarhoje.com/");
             precoDolar = Double.parseDouble(this.getDolar.getPage(url));
 
@@ -75,6 +75,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //função criada para executar o código caso um botão seja chamado - MELHOR OPÇÃO
     @Override
     public void onClick(View view) {
+
+        try {
+            GetDolar.url = new URL("https://dolarhoje.com/");
+            precoDolar = Double.parseDouble(new GetDolar().doInBackground());
+            GetDolar.url = new URL("https://dolarhoje.com/euro-turismo/");
+            precoEuro = Double.parseDouble(new GetDolar().doInBackground());
+        }catch(MalformedURLException e) {
+            System.out.println("ERRO DE URL!");
+        }catch (Exception e) {
+            System.out.println("ERRO");
+        }
+
         //condição para executar o código dependendo do botão que foi clicado
         if(view.getId() == R.id.button){
             //código a ser realizado se o "button" ou "calculate" for instanciado
@@ -89,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Double real = Double.valueOf(value);
 
                 this.mViewHolder.textDolar.setText(String.format("%.2f",real/precoDolar));
-                this.mViewHolder.textEuro.setText(String.format("%.2f",real/5.26));
+                this.mViewHolder.textEuro.setText(String.format("%.2f",real/precoEuro));
             }
 
         }
@@ -108,51 +120,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextView textDolar;
         TextView textEuro;
         Button calculate;
-
-    }
-
-    public static class GetDolar {
-
-        public static String getPage (URL url) throws IOException {
-
-            String content;
-
-            String value = "";
-
-            BufferedReader page = new BufferedReader(new InputStreamReader(url.openStream()));
-
-            while((content = page.readLine()) != null){
-
-                System.out.println(content);
-                if(content.contains("R$")) {
-
-                    char valueParts[] = content.toCharArray();
-                    char igual = 61;
-                    byte cont=0;
-                    for(int i=0;i<valueParts.length;i++) {
-                        if(igual == valueParts[i]) {
-                            cont++;
-                            if(cont == 12) {
-                                value += valueParts[i+2];
-                                value += valueParts[i+3];
-                                value += valueParts[i+4];
-                                value += valueParts[i+5];
-                                return value;
-                            }
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-            page.close();
-
-            return "5";
-
-        }
 
     }
 
