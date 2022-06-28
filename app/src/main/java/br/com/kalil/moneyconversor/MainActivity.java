@@ -25,18 +25,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private GetDolar getDolar = new GetDolar();
 
-    public void main(String[]args){
-        try {
-            url = new URL("https://dolarhoje.com/");
-            precoDolar = Double.parseDouble(this.getDolar.getPage(url));
-
-        }catch(MalformedURLException e) {
-            System.out.println("ERRO DE URL!");
-        }catch (Exception e) {
-            System.out.println("ERRO");
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             GetDolar.url = new URL("https://dolarhoje.com/");
             precoDolar = Double.parseDouble(new GetDolar().doInBackground());
-            GetDolar.url = new URL("https://dolarhoje.com/euro-turismo/");
+            GetDolar.url = new URL("https://dolarhoje.com/euro-hoje/");
             precoEuro = Double.parseDouble(new GetDolar().doInBackground());
         }catch(MalformedURLException e) {
             System.out.println("ERRO DE URL!");
